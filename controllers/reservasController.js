@@ -1,19 +1,19 @@
 const reservas = [];
 
-// crea reserva
+// crear reserva
 const createReserva = (req, res) => {
-  const { hotel, tipoHabitacion, numHuespedes, fechaInicio, fechaFin } = req.body;
-  const nuevaReserva = { id: reservas.length + 1, hotel, tipoHabitacion, numHuespedes, fechaInicio, fechaFin };
+  const { hotel, tipoHabitacion, numHuespedes, fechaInicio, fechaFin, nombreCompleto, rut } = req.body;
+  const nuevaReserva = { id: reservas.length + 1, hotel, tipoHabitacion, numHuespedes, fechaInicio, fechaFin, nombreCompleto, rut };
   reservas.push(nuevaReserva);
   res.status(201).json(nuevaReserva);
 };
 
-// obten la lista de reservas
+// consultar lista de reservas
 const getReservas = (req, res) => {
   res.status(200).json(reservas);
 };
 
-// obten informacion de una reserva especifica
+// consultar información de una reserva específica
 const getReservaById = (req, res) => {
   const reserva = reservas.find(r => r.id === parseInt(req.params.id));
   if (reserva) {
@@ -23,16 +23,18 @@ const getReservaById = (req, res) => {
   }
 };
 
-// actualiza informacion de una reserva
+// actualizar información de una reserva
 const updateReserva = (req, res) => {
   const reserva = reservas.find(r => r.id === parseInt(req.params.id));
   if (reserva) {
-    const { hotel, tipoHabitacion, numHuespedes, fechaInicio, fechaFin } = req.body;
+    const { hotel, tipoHabitacion, numHuespedes, fechaInicio, fechaFin, nombreCompleto, rut } = req.body;
     reserva.hotel = hotel || reserva.hotel;
     reserva.tipoHabitacion = tipoHabitacion || reserva.tipoHabitacion;
     reserva.numHuespedes = numHuespedes || reserva.numHuespedes;
     reserva.fechaInicio = fechaInicio || reserva.fechaInicio;
     reserva.fechaFin = fechaFin || reserva.fechaFin;
+    reserva.nombreCompleto = nombreCompleto || reserva.nombreCompleto;
+    reserva.rut = rut || reserva.rut;
     res.status(200).json(reserva);
   } else {
     res.status(404).json({ message: 'Reserva no encontrada' });
@@ -64,7 +66,7 @@ const filterReservasByDateRange = (req, res) => {
   res.status(200).json(filtered);
 };
 
-// filtra reservas por tipo de habitacion
+// filtra reservas por tipo de habitación
 const filterReservasByRoomType = (req, res) => {
   const { tipoHabitacion } = req.query;
   const filtered = reservas.filter(r => r.tipoHabitacion === tipoHabitacion);
@@ -78,7 +80,7 @@ const filterReservasByStatus = (req, res) => {
   res.status(200).json(filtered);
 };
 
-// filtra reservas por número de huspedes
+// filtra reservas por número de huéspedes
 const filterReservasByNumHuespedes = (req, res) => {
   const { numHuespedes } = req.query;
   const filtered = reservas.filter(r => r.numHuespedes === parseInt(numHuespedes));
